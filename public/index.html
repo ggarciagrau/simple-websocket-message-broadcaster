@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"
+        integrity="sha512-MgkNs0gNdrnOM7k+0L+wgiRc5aLgl74sJQKbIWegVIMvVGPc1+gc1L2oK9Wf/D9pq58eqIJAxOonYPVE5UwUFA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <title>Minichat</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Minichat</h1>
+        <hr />
+        <form id="msgForm">
+            <input name="msg" type="text" placeholder="Mensaje..." />
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+        <hr />
+        <div>
+            <ul id="msgList">
+
+            </ul>
+        </div>
+        <script>
+            const socket = io("http://localhost:8080")
+            const msgForm = document.querySelector("#msgForm")
+            const msgList = document.querySelector("#msgList")
+
+            msgForm.addEventListener("submit", e => {
+                e.preventDefault()
+                socket.emit("msg-to-server", e.target[0].value)
+            })
+
+            socket.on("msg-to-client", e => {
+                console.log(e)
+                let newElement = document.createElement("li")
+                newElement.innerText = e
+                msgList.appendChild(newElement)
+            })
+
+            // const socket = io('http://localhost:8080')
+
+            // socket.on("hello", (e) => {
+            //     console.log(e)
+            // })
+
+            // const enviar = () => {
+            //     console.log("Enviando....")
+            //     socket.emit('client-msg', "Hello petxina")
+            // }
+        </script>
+    </div>
+</body>
+
+</html>
